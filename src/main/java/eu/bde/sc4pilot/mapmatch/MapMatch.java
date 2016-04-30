@@ -15,16 +15,20 @@ public class MapMatch {
 	    RConnection c = initRserve();
 		try {
 			
-			REXP x = c.eval("R.version.string");
+			REXP x = c.eval("loadPackages();" +
+						"road<-readGeoData();" +
+						"gdata<-readGpsData();" +
+						"matches<-match(road,gdata);" +
+						"printMatches(matches)");
 			
-			log.info(x.asString());
+			//log.info(x.asString());
 			
 			
 		} catch (RserveException e) {		
 			e.printStackTrace();
-		} catch (REXPMismatchException e) {			
+		} /*catch (REXPMismatchException e) {			
 			e.printStackTrace();
-		} finally {
+		} */finally {
 			c.close();
 		}
 	}
