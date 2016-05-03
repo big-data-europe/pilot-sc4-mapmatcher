@@ -77,7 +77,14 @@ public class RUtil {
     
     return gps;
   }
-    
+  /**
+   * Creates a R data frame from a CSV file  
+   * @param is
+   * @param header
+   * @return
+   * @throws MalformedURLException
+   * @throws IOException
+   */
   public RList createRListFromCsv(InputStream is, boolean header) throws MalformedURLException, IOException  {
     RList rlist = new RList();
     GpsColumns gps = readCsv(is, header);
