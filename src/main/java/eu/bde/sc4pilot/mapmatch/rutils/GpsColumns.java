@@ -2,8 +2,8 @@ package eu.bde.sc4pilot.mapmatch.rutils;
 
 import java.util.ArrayList;
 /**
- * Contains the GPS data per colums
- * @author luigi
+ * Container of GPS data per colums
+ * @author Luigi Selmi
  *
  */
 public class GpsColumns {

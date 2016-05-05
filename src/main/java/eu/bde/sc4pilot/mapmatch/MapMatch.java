@@ -5,39 +5,51 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
 import org.rosuda.REngine.REXP;
-import org.rosuda.REngine.REXPDouble;
-import org.rosuda.REngine.REXPInteger;
 import org.rosuda.REngine.REXPMismatchException;
-import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.RList;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import eu.bde.sc4pilot.mapmatch.rutils.RUtil;
+
 /**
  * A client class to connect to a proxy R server (Rserve) to evaluate R statements.
- * @author luigi
+ * @author Luigi Selmi
  *
  */
 public class MapMatch {
 	
+  private static String DEFAULT_GPS_DATASET = "https://raw.githubusercontent.com/luigiselmi/pilot-sc4-docker-r/master/test/gpsdata_test.csv";
 	private static final Logger log = LoggerFactory.getLogger(MapMatch.class);
 	
 	public static void main(String[] args) throws MalformedURLException, IOException { 
+	  String urlDataSet;
+	  String rserveHost;
+	  int rservePort = 6311;
+	  if (args.length < 3) {
+	     System.out.println("This application requires three parameters in the following order:\n" +
+	                      "1) Url of the data set to be map matched. A default one is provided.\n" + 
+	                      "2) IP address of Rserve. The default value is \"localhost\".\n" +
+	                      "3) Port number of Rserve. The default value is 6311.\n");
+	     urlDataSet = DEFAULT_GPS_DATASET;
+	     rserveHost = "localhost";
+	  } else {
+	    urlDataSet = args[0];
+	    rserveHost = args[1];
+	    rservePort = Integer.valueOf(args[2]);
+	  }
 	  
 	  // Connection to Rserve
-	  RConnection c = initRserve();
-	  // Rserve root folder. Contains the R script with the commands used by the client 
+	  RConnection c = initRserve(rserveHost, rservePort);
+	  // Rserve root folder. Contains the R script with the functions used by the client (this class)
 	  // and the geographical data for the map matching
-		final String RSERVE_HOME = "/home/luigi/projects/bigdataeurope/certh-mapmatching"; 
+	  final String RSERVE_HOME = "/home/sc4pilot/rserve";
 	  try {
 		  // Gets the data
-	    URL csvUrl = new URL("file:///home/luigi/projects/bigdataeurope/pilot-sc4-mapmatcher/src/test/resources/eu/bde/sc4pilot/mapmatch/rutils/gpsdata_test.csv");
-      URLConnection connection = csvUrl.openConnection();
+	    URL csvUrl = new URL(urlDataSet);
+	    URLConnection connection = csvUrl.openConnection();
       InputStream is = connection.getInputStream();
       RUtil util = new RUtil();
       RList l = util.createRListFromCsv(is, true);
@@ -69,10 +81,10 @@ public class MapMatch {
 		}
 	}
 	
-	private static RConnection initRserve() {
+	private static RConnection initRserve(String rserveHost, int rservePort) {
 		RConnection c = null;
 		try {
-			c = new RConnection();
+			c = new RConnection(rserveHost, rservePort);
 			REXP x = c.eval("R.version.string");
 			log.info(x.asString());;
 			

@@ -12,9 +12,21 @@ import org.rosuda.REngine.REXPInteger;
 import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.RList;
 
+/**
+ * Provides some methods to transform Java collections into R data frame
+ * @author Luigi Selmi
+ *
+ */
 public class RUtil {
   
-    
+  /**
+   *   
+   * @param is
+   * @param header
+   * @return
+   * @throws MalformedURLException
+   * @throws IOException
+   */
   public GpsColumns readCsv(InputStream is, boolean header) throws MalformedURLException, IOException {
     ArrayList<String> csvLines = new ArrayList<String>();
     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
