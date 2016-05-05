@@ -21,7 +21,7 @@ import eu.bde.sc4pilot.mapmatch.rutils.RUtil;
  */
 public class MapMatch {
 	
-  private static String DEFAULT_GPS_DATASET = "https://raw.githubusercontent.com/luigiselmi/pilot-sc4-docker-r/master/test/gpsdata_test.csv";
+  private static String DEFAULT_GPS_DATASET = "https://raw.githubusercontent.com/big-data-europe/pilot-sc4-docker-r/master/test/gpsdata_test.csv";
 	private static final Logger log = LoggerFactory.getLogger(MapMatch.class);
 	
 	public static void main(String[] args) throws MalformedURLException, IOException { 
